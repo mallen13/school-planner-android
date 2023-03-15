@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">School Planning App</string>
+    <string name="home_screen_btn">Show Terms</string>
+    <string name="logo_txt">Logo</string>
+    <string name="term_activity_title">Terms</string>
+</resources>
