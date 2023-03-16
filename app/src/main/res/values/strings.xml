@@ -3,4 +3,8 @@
     <string name="home_screen_btn">Show Terms</string>
     <string name="logo_txt">Logo</string>
     <string name="term_activity_title">Terms</string>
+    <string name="term_details_title">Term Details</string>
+    <string name="course_details_title">Course Details</string>
+    <string name="assessment_details_title">Assessment Details</string>
+    <string name="add_btn">Add Button</string>
 </resources>

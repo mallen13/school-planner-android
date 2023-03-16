@@ -1,10 +1,12 @@
-package com.mattallen.school_planning_app;
+package com.mattallen.school_planning_app.UI;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import com.mattallen.school_planning_app.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void showTerms(View v) {
         //create intent
-        Intent intent = new Intent(MainActivity.this,TermsActivity.class);
+        Intent intent = new Intent(MainActivity.this, TermsActivity.class);
 
         //launch activity
         startActivity(intent);

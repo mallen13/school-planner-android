@@ -14,14 +14,35 @@
 
         <!-- Term Screen -->
         <activity
-            android:name=".TermsActivity"
+            android:name=".UI.TermsActivity"
             android:exported="false"
             android:label="@string/term_activity_title"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".UI.MainActivity" />
+
+        <!-- Term Details Screen -->
+        <activity
+            android:name=".UI.TermDetailsActivity"
+            android:exported="false"
+            android:label="@string/term_details_title"
+            android:parentActivityName=".UI.TermsActivity" />
+
+        <!-- Course Details Screen -->
+        <activity
+            android:name=".UI.CourseDetailsActivity"
+            android:exported="false"
+            android:label="@string/course_details_title"
+            android:parentActivityName=".UI.TermDetailsActivity" />
+
+        <!-- Assessment Details Screen -->
+        <activity
+            android:name=".UI.AssessmentDetailsActivity"
+            android:exported="false"
+            android:label="@string/assessment_details_title"
+            android:parentActivityName=".UI.CourseDetailsActivity" />
 
         <!-- Main Screen -->
         <activity
-            android:name=".MainActivity"
+            android:name=".UI.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +50,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>
