@@ -12,4 +12,5 @@
     <string name="start_date_label">Start Date: </string>
     <string name="end_date_label">End Date: </string>
     <string name="save_btn_txt">Save</string>
+    <string name="delete_btn_txt">Delete</string>
 </resources>
