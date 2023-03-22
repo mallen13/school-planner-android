@@ -67,7 +67,6 @@
                     android:id="@+id/courseStartDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
                     android:hint="Enter a Date"
                     android:inputType="date" />
 
@@ -90,7 +89,6 @@
                     android:id="@+id/courseEndDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
                     android:hint="Enter a Date"
                     android:inputType="date" />
 
@@ -113,7 +111,7 @@
                     android:id="@+id/courseStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Status" />
+                    android:hint="in progress" />
 
             </LinearLayout>
 

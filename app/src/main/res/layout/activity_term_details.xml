@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="@android:color/holo_green_light"
     tools:context=".UI.TermDetailsActivity">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -31,7 +30,6 @@
             android:orientation="vertical">
 
             <!--Name-->
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -45,10 +43,11 @@
                     android:textSize="16sp" />
 
                 <EditText
-                    android:id="@+id/termTitleInput"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="@string/item_name_hint" />
+                    android:id="@+id/termTitleInput"
+                    android:hint="Title"/>
+
 
             </LinearLayout>
 
@@ -69,7 +68,6 @@
                     android:id="@+id/termStartDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
                     android:hint="Enter a Date"
                     android:inputType="date" />
 
@@ -92,7 +90,6 @@
                     android:id="@+id/termEndDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
                     android:hint="Enter a Date"
                     android:inputType="date" />
 

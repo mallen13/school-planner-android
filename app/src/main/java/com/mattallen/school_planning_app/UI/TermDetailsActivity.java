@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -45,7 +46,7 @@ public class TermDetailsActivity extends AppCompatActivity {
         startDate = getIntent().getStringExtra("startDate");
         endDate =  getIntent().getStringExtra("endDate");
 
-        //set inputs to intent vals
+        //editName.setText(name);
         editName.setText(name);
         editStartDate.setText(startDate);
         editEndDate.setText(endDate);
@@ -53,7 +54,6 @@ public class TermDetailsActivity extends AppCompatActivity {
         repository = new Repository(getApplication());
 
         //show list of courses
-        setContentView(R.layout.activity_term_details);
         RecyclerView recyclerView = findViewById(R.id.courseRecyclerView);
         List<Course> courses = null;
         try {

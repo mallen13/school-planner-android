@@ -76,7 +76,6 @@ public class CourseDetailsActivity extends AppCompatActivity {
         repository = new Repository(getApplication());
 
         //show list of assessments
-        setContentView(R.layout.activity_course_details);
         RecyclerView recyclerView = findViewById(R.id.assessmentRecyclerView);
         List<Assessment> assessments = null;
         try {
