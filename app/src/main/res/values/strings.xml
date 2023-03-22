@@ -7,4 +7,9 @@
     <string name="course_details_title">Course Details</string>
     <string name="assessment_details_title">Assessment Details</string>
     <string name="add_btn">Add Button</string>
+    <string name="item_name_label">Title:</string>
+    <string name="item_name_hint">Title</string>
+    <string name="start_date_label">Start Date: </string>
+    <string name="end_date_label">End Date: </string>
+    <string name="save_btn_txt">Save</string>
 </resources>

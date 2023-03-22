@@ -17,9 +17,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Term term = new Term(0,"03/20/2023","03/25/2023","Test Term");
-        Repository repo = new Repository(getApplication());
-        repo.insert(term);
+//        Term term = new Term(0,"03/20/2023","03/25/2023","Test Term");
+//        Repository repo = new Repository(getApplication());
+//        repo.insert(term);
     }
 
     public void showTerms(View v) {
