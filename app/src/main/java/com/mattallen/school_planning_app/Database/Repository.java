@@ -1,7 +1,6 @@
 package com.mattallen.school_planning_app.Database;
 
 import android.app.Application;
-import android.provider.ContactsContract;
 
 import com.mattallen.school_planning_app.DAO.AssessmentDAO;
 import com.mattallen.school_planning_app.DAO.CourseDAO;
@@ -18,10 +17,9 @@ public class Repository {
     private TermDAO mTermDAO;
     private CourseDAO mCourseDAO;
     private AssessmentDAO mAssessmentDAO;
-
-    private List<Term> allParts;
     private List<Term> allTerms;
-    private List<AssessmentDAO> allAssessments;
+    private List<Course> allCourses;
+    private List<Assessment> allAssessments;
 
     private static int NUM_OF_THREADS = 4;
     static final ExecutorService databaseExecutor = Executors.newFixedThreadPool(NUM_OF_THREADS);
@@ -33,16 +31,15 @@ public class Repository {
         mAssessmentDAO = db.assessmentDAO();
     }
 
+    //terms
     public List<Term> getAllTerms() throws InterruptedException {
         databaseExecutor.execute( ()-> {
             allTerms = mTermDAO.getAllTerms();
         });
-
         Thread.sleep(1000);
         return allTerms;
     }
 
-    //terms
     public void insert(Term term) {
         databaseExecutor.execute( ()-> {
             mTermDAO.insert(term);
@@ -80,6 +77,15 @@ public class Repository {
     }
 
     //courses
+
+    public List<Course> getAllCourses(int termId) throws InterruptedException {
+        databaseExecutor.execute( ()-> {
+            allCourses = mCourseDAO.getAllCourses(termId);
+        });
+        Thread.sleep(1000);
+        return allCourses;
+    }
+
     public void insert(Course course) {
         databaseExecutor.execute( ()-> {
             mCourseDAO.insert(course);
@@ -117,6 +123,14 @@ public class Repository {
     }
 
     //assessments
+    public List<Assessment> getAllAssessments(int courseId) throws InterruptedException {
+        databaseExecutor.execute( ()-> {
+            allAssessments = mAssessmentDAO.getAllAssessments(courseId);
+        });
+        Thread.sleep(1000);
+        return allAssessments;
+    }
+
     public void insert(Assessment assessment) {
         databaseExecutor.execute( ()-> {
             mAssessmentDAO.insert(assessment);

@@ -10,40 +10,46 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.mattallen.school_planning_app.Entities.Term;
+import com.mattallen.school_planning_app.Entities.Course;
 import com.mattallen.school_planning_app.R;
 
 import java.util.List;
 
-public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.TermViewHolder> {
+public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseViewHolder> {
     public CourseAdapter(Context context, LayoutInflater mInflater) {
         this.context = context;
         this.mInflater = mInflater;
     }
 
-    class TermViewHolder extends RecyclerView.ViewHolder {
-        private final TextView termItemView;
-        private TermViewHolder(View itemView) {
+    class CourseViewHolder extends RecyclerView.ViewHolder {
+        private final TextView courseItemView;
+        private CourseViewHolder(View itemView) {
             super(itemView);
-            termItemView = itemView.findViewById(R.id.textView);
+            courseItemView = itemView.findViewById(R.id.courseItemTextView);
             itemView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
-                    final Term current = mTerms.get(position);
-                    Intent intent = new Intent(context,TermDetailsActivity.class);
-                    intent.putExtra("id",current.getTermId());
-                    intent.putExtra("title",current.getTermTitle());
+                    final Course current = mCourses.get(position);
+                    Intent intent = new Intent(context,CourseDetailsActivity.class);
+
+                    intent.putExtra("id",current.getCourseId());
+                    intent.putExtra("title",current.getCourseTitle());
                     intent.putExtra("startDate",current.getStartDate());
                     intent.putExtra("endDate",current.getEndDate());
+                    intent.putExtra("status",current.getStatus());
+                    intent.putExtra("note",current.getCourseNote());
+                    intent.putExtra("instructorName",current.getInstructorName());
+                    intent.putExtra("instructorPhone",current.getInstructorPhone());
+                    intent.putExtra("instructorEmail",current.getInstructorEmail());
                     context.startActivity(intent);
                 }
             });
         }
     }
 
-    private List<Term> mTerms;
+    private List<Course> mCourses;
     private final Context context;
     private final LayoutInflater mInflater;
 
@@ -54,29 +60,29 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.TermViewHo
 
     @NonNull
     @Override
-    public CourseAdapter.TermViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = mInflater.inflate(R.layout.term_list_item, parent, false);
-        return new TermViewHolder(itemView);
+    public CourseAdapter.CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = mInflater.inflate(R.layout.course_list_item, parent, false);
+        return new CourseViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CourseAdapter.TermViewHolder holder, int position) {
-        if (mTerms != null) {
-            Term current = mTerms.get(position);
-            String name = current.getTermTitle();
-            holder.termItemView.setText(name);
+    public void onBindViewHolder(@NonNull CourseAdapter.CourseViewHolder holder, int position) {
+        if (mCourses != null) {
+            Course current = mCourses.get(position);
+            String name = current.getCourseTitle();
+            holder.courseItemView.setText(name);
         }
     }
 
-    public void setTerms(List<Term> terms) {
-        mTerms = terms;
+    public void setCourses(List<Course> Courses) {
+        mCourses = Courses;
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        if (mTerms != null) {
-            return mTerms.size();
+        if (mCourses != null) {
+            return mCourses.size();
         } else {
             return 0;
         }

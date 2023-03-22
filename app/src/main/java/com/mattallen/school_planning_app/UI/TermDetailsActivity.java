@@ -1,17 +1,21 @@
 package com.mattallen.school_planning_app.UI;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
 import com.mattallen.school_planning_app.Database.Repository;
+import com.mattallen.school_planning_app.Entities.Course;
 import com.mattallen.school_planning_app.Entities.Term;
 import com.mattallen.school_planning_app.Helpers.Helpers;
 import com.mattallen.school_planning_app.R;
+
+import java.util.List;
 
 public class TermDetailsActivity extends AppCompatActivity {
     EditText editName;
@@ -47,6 +51,20 @@ public class TermDetailsActivity extends AppCompatActivity {
         editEndDate.setText(endDate);
 
         repository = new Repository(getApplication());
+
+        //show list of courses
+        setContentView(R.layout.activity_term_details);
+        RecyclerView recyclerView = findViewById(R.id.courseRecyclerView);
+        List<Course> courses = null;
+        try {
+            courses = repository.getAllCourses(termId);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        final CourseAdapter adapter = new CourseAdapter(this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter.setCourses(courses);
     }
 
     public void saveTerm(View v) throws InterruptedException {
