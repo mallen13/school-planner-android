@@ -4,9 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -17,6 +17,7 @@ import com.mattallen.school_planning_app.Helpers.Helpers;
 import com.mattallen.school_planning_app.R;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class TermDetailsActivity extends AppCompatActivity {
     EditText editName;
@@ -34,6 +35,7 @@ public class TermDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_term_details);
+        repository = new Repository(getApplication());
 
         //get inputs
         editName = findViewById(R.id.termTitleInput);
@@ -42,22 +44,21 @@ public class TermDetailsActivity extends AppCompatActivity {
 
         //get intents
         termId = getIntent().getIntExtra("id", -1 );
+
         name = getIntent().getStringExtra("title");
         startDate = getIntent().getStringExtra("startDate");
         endDate =  getIntent().getStringExtra("endDate");
 
-        //editName.setText(name);
+        //set values
         editName.setText(name);
         editStartDate.setText(startDate);
         editEndDate.setText(endDate);
-
-        repository = new Repository(getApplication());
 
         //show list of courses
         RecyclerView recyclerView = findViewById(R.id.courseRecyclerView);
         List<Course> courses = null;
         try {
-            courses = repository.getAllCourses(termId);
+            courses = repository.getAllCoursesByTerm(termId);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -72,10 +73,23 @@ public class TermDetailsActivity extends AppCompatActivity {
 
         //if id is -1, insert new
         if (termId == -1) {
-            int newId = repository.getAllTerms().get(repository.getAllTerms().size()-1).getTermId() + 1;
+            //new id = 0 or last + 1
+            List <Term> terms = repository.getAllTerms();
+            int length = terms.size();
+            int newId;
+            try {
+                newId = terms.get(length - 1).getTermId() + 1;
+            } catch(Exception e) {
+                newId = 1;
+            }
+
+            termId = newId;
+
+            //newId = repository.getAllTerms().get(repository.getAllTerms().size()-1).getTermId() + 1;
+
             term = new Term(newId, editStartDate.getText().toString(), editEndDate.getText().toString(), editName.getText().toString() );
             repository.insert(term);
-        //otherwise update
+            //otherwise update
         } else {
             term = new Term(termId, editStartDate.getText().toString(), editEndDate.getText().toString(), editName.getText().toString());
             repository.update(term);
@@ -86,6 +100,20 @@ public class TermDetailsActivity extends AppCompatActivity {
 
     public void deleteTerm(View v) throws InterruptedException {
         Term term;
+
+        //if empty
+        if (termId == -1) {
+            Helpers.showToast(getApplicationContext(),"No Item Selected");
+            return;
+        }
+
+        //check if associated values in recycler view
+        List<Course> items = repository.getAllCoursesByTerm(termId);
+        if (items.size() > 0 ) {
+            Helpers.showToast(getApplicationContext(),"Associated courses, cannot delete");
+            return;
+        }
+
         term = new Term(termId, editStartDate.getText().toString(), editEndDate.getText().toString(), editName.getText().toString());
         repository.delete(term);
 
@@ -93,9 +121,41 @@ public class TermDetailsActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    public void addCourse(View v) {
+    public void addCourse(View v) throws InterruptedException {
+        //if empty
+        if (editName.getText().toString().isEmpty()) {
+            Helpers.showToast(getApplicationContext(),"Add a title first.");
+            return;
+        }
+
+        this.saveTerm(v);
         Intent i = new Intent(TermDetailsActivity.this,CourseDetailsActivity.class);
+        i.putExtra("termId",termId);
         startActivity(i);
     }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+
+            //show list of courses
+            RecyclerView recyclerView = findViewById(R.id.courseRecyclerView);
+            List<Course> courses = null;
+            try {
+                courses = repository.getAllCoursesByTerm(termId);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            final CourseAdapter adapter = new CourseAdapter(this);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            adapter.setCourses(courses);
+
+            onBackPressed();    //Call the back button's method
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
 }

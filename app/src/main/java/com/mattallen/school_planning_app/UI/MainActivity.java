@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 //        //Repository repo = new Repository(getApplication());
 //        repo.insert(course);
 //
-//        Assessment assessment = new Assessment(0,"OA","My Assessment","01/01/2023",1);
+//        Assessment assessment = new Assessment(0,"My Assessment","OA","01/01/2023",1);
 //       // Repository repo = new Repository(getApplication());
 //        repo.insert(assessment);
     }

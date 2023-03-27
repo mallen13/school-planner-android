@@ -6,13 +6,31 @@ import androidx.room.PrimaryKey;
 public class Assessment {
     @PrimaryKey(autoGenerate = true)
     private int assessmentId;
-    private String assessmentType;
     private String assessmentName;
+    private String assessmentCategory;
 
-    public Assessment(int assessmentId, String assessmentType, String assessmentName, String endDate, int courseId) {
+    public String getAssessmentCategory() {
+        return assessmentCategory;
+    }
+
+    public void setAssessmentCategory(String assessmentCategory) {
+        this.assessmentCategory = assessmentCategory;
+    }
+
+    public String getAssessmentEndDate() {
+        return assessmentEndDate;
+    }
+
+    public void setAssessmentEndDate(String assessmentEndDate) {
+        this.assessmentEndDate = assessmentEndDate;
+    }
+
+    private String assessmentEndDate;
+
+    public Assessment(int assessmentId, String assessmentName, String assessmentCategory, String endDate, int courseId) {
         this.assessmentId = assessmentId;
-        this.assessmentType = assessmentType;
         this.assessmentName = assessmentName;
+        this.assessmentCategory = assessmentCategory;
         this.endDate = endDate;
         this.courseId = courseId;
     }
@@ -32,8 +50,6 @@ public class Assessment {
     public Assessment() {
     }
 
-
-
     public int getCourseId() {
         return courseId;
     }
@@ -48,14 +64,6 @@ public class Assessment {
 
     public void setAssessmentId(int assessmentId) {
         this.assessmentId = assessmentId;
-    }
-
-    public String getAssessmentType() {
-        return assessmentType;
-    }
-
-    public void setAssessmentType(String assessmentType) {
-        this.assessmentType = assessmentType;
     }
 
     public String getEndDate() {

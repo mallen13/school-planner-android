@@ -78,9 +78,17 @@ public class Repository {
 
     //courses
 
-    public List<Course> getAllCourses(int termId) throws InterruptedException {
+    public List<Course> getAllCourses() throws InterruptedException {
         databaseExecutor.execute( ()-> {
-            allCourses = mCourseDAO.getAllCourses(termId);
+            allCourses = mCourseDAO.getAllCourses();
+        });
+        Thread.sleep(1000);
+        return allCourses;
+    }
+
+    public List<Course> getAllCoursesByTerm(int termId) throws InterruptedException {
+        databaseExecutor.execute( ()-> {
+            allCourses = mCourseDAO.getAllCoursesByTerm(termId);
         });
         Thread.sleep(1000);
         return allCourses;
@@ -123,9 +131,17 @@ public class Repository {
     }
 
     //assessments
-    public List<Assessment> getAllAssessments(int courseId) throws InterruptedException {
+    public List<Assessment> getAllAssessments() throws InterruptedException {
         databaseExecutor.execute( ()-> {
-            allAssessments = mAssessmentDAO.getAllAssessments(courseId);
+            allAssessments = mAssessmentDAO.getAllAssessments();
+        });
+        Thread.sleep(1000);
+        return allAssessments;
+    }
+
+    public List<Assessment> getAllAssessmentsByCourse(int courseId) throws InterruptedException {
+        databaseExecutor.execute( ()-> {
+            allAssessments = mAssessmentDAO.getAllAssessmentsByCourse(courseId);
         });
         Thread.sleep(1000);
         return allAssessments;
