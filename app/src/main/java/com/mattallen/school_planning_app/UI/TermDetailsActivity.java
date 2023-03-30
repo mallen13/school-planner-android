@@ -16,6 +16,7 @@ import com.mattallen.school_planning_app.Entities.Term;
 import com.mattallen.school_planning_app.Helpers.Helpers;
 import com.mattallen.school_planning_app.R;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -74,7 +75,7 @@ public class TermDetailsActivity extends AppCompatActivity {
         //if id is -1, insert new
         if (termId == -1) {
             //new id = 0 or last + 1
-            List <Term> terms = repository.getAllTerms();
+            ArrayList<Term> terms = new ArrayList<>(repository.getAllTerms());
             int length = terms.size();
             int newId;
             try {
@@ -133,29 +134,5 @@ public class TermDetailsActivity extends AppCompatActivity {
         i.putExtra("termId",termId);
         startActivity(i);
     }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-
-            //show list of courses
-            RecyclerView recyclerView = findViewById(R.id.courseRecyclerView);
-            List<Course> courses = null;
-            try {
-                courses = repository.getAllCoursesByTerm(termId);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            final CourseAdapter adapter = new CourseAdapter(this);
-            recyclerView.setAdapter(adapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            adapter.setCourses(courses);
-
-            onBackPressed();    //Call the back button's method
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
 
 }

@@ -9,7 +9,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.mattallen.school_planning_app.Database.Repository;
 import com.mattallen.school_planning_app.Entities.Assessment;
@@ -19,12 +22,13 @@ import com.mattallen.school_planning_app.Helpers.Helpers;
 import com.mattallen.school_planning_app.R;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
-public class CourseDetailsActivity extends AppCompatActivity {
+public class CourseDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     EditText editName;
     EditText editStartDate;
     EditText editEndDate;
-    EditText editStatus;
+    String editStatus;
     EditText editNote;
     EditText editInstructorName;
     EditText editInstructorPhone;
@@ -51,7 +55,6 @@ public class CourseDetailsActivity extends AppCompatActivity {
         editName = findViewById(R.id.courseTitleInput);
         editStartDate = findViewById(R.id.courseStartDate);
         editEndDate = findViewById(R.id.courseEndDate);
-        editStatus = findViewById(R.id.courseStatus);
         editNote = findViewById(R.id.courseNotes);
         editInstructorName = findViewById(R.id.instructorName);
         editInstructorEmail = findViewById(R.id.instructorEmail);
@@ -73,7 +76,6 @@ public class CourseDetailsActivity extends AppCompatActivity {
         editName.setText(name);
         editStartDate.setText(startDate);
         editEndDate.setText(endDate);
-        editStatus.setText(status);
         editNote.setText(note);
         editInstructorName.setText(instructorName);
         editInstructorEmail.setText(instructorEmail);
@@ -93,6 +95,26 @@ public class CourseDetailsActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter.setAssessments(assessments);
+
+
+        //spinner
+        Spinner spinner = (Spinner) findViewById(R.id.courseStatus);
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> sAdapter = ArrayAdapter.createFromResource(this,
+                R.array.course_statuses, android.R.layout.simple_spinner_item);
+
+        // Specify the layout to use when the list of choices appears
+        sAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner
+        spinner.setAdapter(sAdapter);
+        spinner.setOnItemSelectedListener(this);
+
+        // Prefill spinner with status value
+        int spinnerPosition = sAdapter.getPosition(status);
+        spinner.setSelection(spinnerPosition);
+
     }
 
     public void saveCourse(View v) throws InterruptedException {
@@ -122,7 +144,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
                     editName.getText().toString(),
                     editStartDate.getText().toString(),
                     editEndDate.getText().toString(),
-                    editStatus.getText().toString(),
+                    editStatus,
                     editInstructorName.getText().toString(),
                     editInstructorEmail.getText().toString(),
                     editInstructorPhone.getText().toString(),
@@ -137,7 +159,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
                     editName.getText().toString(),
                     editStartDate.getText().toString(),
                     editEndDate.getText().toString(),
-                    editStatus.getText().toString(),
+                    editStatus,
                     editInstructorName.getText().toString(),
                     editInstructorEmail.getText().toString(),
                     editInstructorPhone.getText().toString(),
@@ -171,7 +193,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
                 editName.getText().toString(),
                 editStartDate.getText().toString(),
                 editEndDate.getText().toString(),
-                editStatus.getText().toString(),
+                editStatus,
                 editInstructorName.getText().toString(),
                 editInstructorEmail.getText().toString(),
                 editInstructorPhone.getText().toString(),
@@ -197,6 +219,61 @@ public class CourseDetailsActivity extends AppCompatActivity {
         Intent i = new Intent(CourseDetailsActivity.this,AssessmentDetailsActivity.class);
         i.putExtra("courseId",courseId);
         startActivity(i);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();    //Call the back button's method
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        //put Intent to go back here
+        List<Term> terms = null;
+        Term current = null;
+
+        try {
+            terms = repository.getAllTerms();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        for (int i = 0; i < terms.size(); i++) {
+            if (terms.get(i).getTermId() == termId) {
+                current = terms.get(i);
+            }
+        }
+
+        Intent intent = new Intent(this,TermDetailsActivity.class);
+        intent.putExtra("id", current.getTermId());
+        intent.putExtra("title", current.getTermTitle());
+        intent.putExtra("startDate", current.getStartDate());
+        intent.putExtra("endDate", current.getEndDate());
+
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        editStatus = parent.getItemAtPosition(pos).toString();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Add your code here
+    }
+
+    public void shareNote(){
+        System.out.println("method called");
+        String textToShare = "This is the text I want to share.";
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, textToShare);
+//        startActivity(Intent.createChooser(shareIntent, "Share via"));
     }
 
 }

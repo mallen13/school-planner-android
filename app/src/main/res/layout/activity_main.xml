@@ -7,13 +7,15 @@
     tools:context=".UI.MainActivity">
 
     <ScrollView
+        android:id="@+id/mainScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/mainLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TableRow
                 android:layout_width="match_parent"
@@ -42,19 +44,6 @@
                     android:textSize="24sp" />
             </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="113dp"
-                android:gravity="center">
-
-                <Button
-                    android:id="@+id/button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="showTerms"
-                    android:text="@string/home_screen_btn" />
-
-            </TableRow>
         </LinearLayout>
     </ScrollView>
 

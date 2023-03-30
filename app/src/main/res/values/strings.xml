@@ -18,4 +18,14 @@
     <string name="instructor_name">Instructor Name:</string>
     <string name="instructor_phone">Instructor Phone:</string>
     <string name="instructor_email">Instructor Email:</string>
+    <string-array name="course_statuses">
+        <item>In Progress</item>
+        <item>Completed</item>
+        <item>Dropped</item>
+        <item>Plan to Take</item>
+    </string-array>
+    <string-array name="assessment_types">
+        <item>Objective Assessment (OA)</item>
+        <item>Performance Assessment (PA)</item>
+    </string-array>
 </resources>

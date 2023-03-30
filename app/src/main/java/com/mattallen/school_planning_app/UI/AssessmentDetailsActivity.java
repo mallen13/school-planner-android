@@ -4,9 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.mattallen.school_planning_app.Database.Repository;
 import com.mattallen.school_planning_app.Entities.Assessment;
@@ -17,10 +21,10 @@ import com.mattallen.school_planning_app.R;
 
 import java.util.List;
 
-public class AssessmentDetailsActivity extends AppCompatActivity {
+public class AssessmentDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     EditText editName;
     EditText editEndDate;
-    EditText editCategory;
+    String editCategory;
     int assessmentId;
     int courseId;
     String category;
@@ -36,7 +40,6 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
 
         //get inputs
         editName = findViewById(R.id.assessmentTitleInput);
-        editCategory = findViewById(R.id.assessmentCategory);
         editEndDate = findViewById(R.id.assessmentEndDate);
 
         //get intents
@@ -48,10 +51,27 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
 
         //set inputs to intent vals
         editName.setText(name);
-        editCategory.setText(category);
         editEndDate.setText(endDate);
 
         repository = new Repository(getApplication());
+
+        //spinner
+        Spinner spinner = (Spinner) findViewById(R.id.assessmentCategory);
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> sAdapter = ArrayAdapter.createFromResource(this,
+                R.array.assessment_types, android.R.layout.simple_spinner_item);
+
+        // Specify the layout to use when the list of choices appears
+        sAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner
+        spinner.setAdapter(sAdapter);
+        spinner.setOnItemSelectedListener(this);
+
+        // Prefill spinner with status value
+        int spinnerPosition = sAdapter.getPosition(category);
+        spinner.setSelection(spinnerPosition);
     }
 
     public void saveAssessment(View v) throws InterruptedException {
@@ -73,7 +93,7 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
             assessment = new Assessment(
                     newId,
                     editName.getText().toString(),
-                    editCategory.getText().toString(),
+                    editCategory,
                     editEndDate.getText().toString(),
                     courseId
             );
@@ -83,7 +103,7 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
             assessment = new Assessment(
                     assessmentId,
                     editName.getText().toString(),
-                    editCategory.getText().toString(),
+                    editCategory,
                     editEndDate.getText().toString(),
                     courseId
             );
@@ -105,7 +125,7 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
         assessment = new Assessment(
                 assessmentId,
                 editName.getText().toString(),
-                editCategory.getText().toString(),
+                editCategory,
                 editEndDate.getText().toString(),
                 courseId
         );
@@ -114,5 +134,59 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
         Intent i = new Intent(this,CourseDetailsActivity.class);
 
         startActivity(i);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        //put Intent to go back here
+        List<Course> courses = null;
+        Course current = null;
+
+        try {
+            courses = repository.getAllCourses();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        for (int i = 0; i < courses.size(); i++) {
+            if (courses.get(i).getCourseId() == assessmentId) {
+                current = courses.get(i);
+            }
+        }
+
+        Intent intent = new Intent(this,CourseDetailsActivity.class);
+
+        intent.putExtra("id",current.getCourseId());
+        intent.putExtra("title",current.getCourseTitle());
+        intent.putExtra("startDate",current.getStartDate());
+        intent.putExtra("endDate",current.getEndDate());
+        intent.putExtra("status",current.getStatus());
+        intent.putExtra("note",current.getCourseNote());
+        intent.putExtra("instructorName",current.getInstructorName());
+        intent.putExtra("instructorPhone",current.getInstructorPhone());
+        intent.putExtra("instructorEmail",current.getInstructorEmail());
+        intent.putExtra("termId",current.getTermId());
+
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        editCategory = parent.getItemAtPosition(pos).toString();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Add your code here
     }
 }

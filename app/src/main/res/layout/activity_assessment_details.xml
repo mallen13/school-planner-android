@@ -50,11 +50,12 @@
                     android:text="Category"
                     android:textSize="16sp" />
 
-                <EditText
+
+                <Spinner
                     android:id="@+id/assessmentCategory"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Category" />
+                    android:layout_weight="1" />
 
             </LinearLayout>
 

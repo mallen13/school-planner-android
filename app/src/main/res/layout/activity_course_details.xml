@@ -107,11 +107,11 @@
                     android:text="@string/course_status"
                     android:textSize="16sp" />
 
-                <EditText
+                <Spinner
                     android:id="@+id/courseStatus"
-                    android:layout_width="wrap_content"
+                    android:layout_width="10dp"
                     android:layout_height="wrap_content"
-                    android:hint="in progress" />
+                    android:layout_weight="1" />
 
             </LinearLayout>
 
@@ -122,7 +122,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:padding="2dp"
                     android:text="@string/course_note"
@@ -133,6 +133,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="Notes" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:onClick="shareNote"
+                    android:text="Share Note" />
 
             </LinearLayout>
 
