@@ -1,7 +1,12 @@
 package com.mattallen.school_planning_app.UI;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -75,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
 //        Assessment assessment = new Assessment(0,"My Assessment","Objective Assessment (OA)","01/01/2023",1);
 //       // Repository repo = new Repository(getApplication());
 //        repo.insert(assessment);
+
+        createNotification("My Title","My Notification");
     }
 
     public void showTerms(View v) {
@@ -85,4 +92,31 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+
+    public void createNotification(String title, String content) {
+
+        // create a notification channel
+        String channelId = "default_channel_2";
+        String channelName = "Default Channel_2";
+        NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.createNotificationChannel(channel);
+
+        //create notification builder
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.drawable.app_icon_foreground)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        //create explicit intent
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        // issue the notification
+        notificationManager.notify(0, builder.build());
+
+    }
+
 }

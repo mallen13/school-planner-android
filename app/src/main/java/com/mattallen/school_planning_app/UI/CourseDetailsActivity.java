@@ -267,13 +267,12 @@ public class CourseDetailsActivity extends AppCompatActivity implements AdapterV
         // Add your code here
     }
 
-    public void shareNote(){
-        System.out.println("method called");
-        String textToShare = "This is the text I want to share.";
+    public void shareNote(View v){
+        String note = editName.getText().toString();
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, textToShare);
-//        startActivity(Intent.createChooser(shareIntent, "Share via"));
+        shareIntent.putExtra(Intent.EXTRA_TEXT, note);
+        startActivity(Intent.createChooser(shareIntent, "Share via"));
     }
 
 }
