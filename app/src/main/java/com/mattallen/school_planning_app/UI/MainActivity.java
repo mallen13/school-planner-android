@@ -20,12 +20,14 @@ import com.mattallen.school_planning_app.Database.Repository;
 import com.mattallen.school_planning_app.Entities.Assessment;
 import com.mattallen.school_planning_app.Entities.Course;
 import com.mattallen.school_planning_app.Entities.Term;
+import com.mattallen.school_planning_app.Helpers.Helpers;
 import com.mattallen.school_planning_app.R;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -81,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
 //       // Repository repo = new Repository(getApplication());
 //        repo.insert(assessment);
 
-        createNotification("My Title","My Notification");
     }
 
     public void showTerms(View v) {

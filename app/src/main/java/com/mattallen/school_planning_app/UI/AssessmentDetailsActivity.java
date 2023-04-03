@@ -19,7 +19,10 @@ import com.mattallen.school_planning_app.Entities.Term;
 import com.mattallen.school_planning_app.Helpers.Helpers;
 import com.mattallen.school_planning_app.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class AssessmentDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     EditText editName;
@@ -76,6 +79,12 @@ public class AssessmentDetailsActivity extends AppCompatActivity implements Adap
 
     public void saveAssessment(View v) throws InterruptedException {
         Assessment assessment;
+
+        //validate dates
+        if (editEndDate.getText().toString().contains(".") || editEndDate.getText().toString().contains("-")) {
+            Helpers.showToast(getApplicationContext(),"Only use slashes in dates");
+            return;
+        }
 
         //if id is -1, insert new
         if (assessmentId == -1) {
@@ -188,5 +197,23 @@ public class AssessmentDetailsActivity extends AppCompatActivity implements Adap
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         // Add your code here
+    }
+
+    public void setAssessmentNotification(View v) {
+        //validate dates
+        if (editEndDate.getText().toString().contains(".") || editEndDate.getText().toString().contains("-")) {
+            Helpers.showToast(getApplicationContext(),"Only use slashes in dates");
+            return;
+        }
+
+        if (editEndDate.getText().toString().isEmpty()) {
+            Helpers.showToast(getApplicationContext(), "Date cannot be empty.");
+            return;
+        }
+
+        String dateString = editEndDate.getText().toString();
+
+        String msg = editCategory.toString() + ": " + '"' + editName.getText().toString() + '"' + " due on " + dateString;
+        Helpers.createNotification(this, "Assessment Reminder", msg, dateString);
     }
 }

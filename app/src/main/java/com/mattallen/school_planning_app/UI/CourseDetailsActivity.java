@@ -21,10 +21,14 @@ import com.mattallen.school_planning_app.Entities.Term;
 import com.mattallen.school_planning_app.Helpers.Helpers;
 import com.mattallen.school_planning_app.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class CourseDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class CourseDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     EditText editName;
     EditText editStartDate;
     EditText editEndDate;
@@ -61,15 +65,15 @@ public class CourseDetailsActivity extends AppCompatActivity implements AdapterV
         editInstructorPhone = findViewById(R.id.instructorPhone);
 
         //get intents
-        courseId = getIntent().getIntExtra("id", -1 );
+        courseId = getIntent().getIntExtra("id", -1);
         name = getIntent().getStringExtra("title");
         startDate = getIntent().getStringExtra("startDate");
-        endDate =  getIntent().getStringExtra("endDate");
-        status =  getIntent().getStringExtra("status");
-        note =  getIntent().getStringExtra("note");
-        instructorName =  getIntent().getStringExtra("instructorName");
-        instructorPhone =  getIntent().getStringExtra("instructorPhone");
-        instructorEmail=  getIntent().getStringExtra("instructorEmail");
+        endDate = getIntent().getStringExtra("endDate");
+        status = getIntent().getStringExtra("status");
+        note = getIntent().getStringExtra("note");
+        instructorName = getIntent().getStringExtra("instructorName");
+        instructorPhone = getIntent().getStringExtra("instructorPhone");
+        instructorEmail = getIntent().getStringExtra("instructorEmail");
         termId = getIntent().getIntExtra("termId", -1);
 
         //set inputs to intent vals
@@ -117,24 +121,56 @@ public class CourseDetailsActivity extends AppCompatActivity implements AdapterV
 
     }
 
-    public void saveCourse(View v) throws InterruptedException {
+    public boolean saveCourse(View v) throws InterruptedException {
         Course course;
 
         //if empty
         if (editName.getText().toString().isEmpty()) {
-            Helpers.showToast(getApplicationContext(),"Add a title first.");
-            return;
+            Helpers.showToast(getApplicationContext(), "Add a title first.");
+            return false;
         }
+
+        //validate dates
+        if (editStartDate.getText().toString().contains(".") || editEndDate.getText().toString().contains(".") || editStartDate.getText().toString().contains("-") || editEndDate.getText().toString().contains("-")) {
+            Helpers.showToast(getApplicationContext(), "Only use slashes in dates");
+            return false;
+        }
+
+        if (editStartDate.getText().toString().isEmpty() || editEndDate.getText().toString().isEmpty()) {
+            Helpers.showToast(getApplicationContext(), "Dates cannot be empty.");
+            return false;
+        }
+
+        //check end date after start date
+        String startString = editStartDate.getText().toString();
+        String endString = editEndDate.getText().toString();
+        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = format.parse(startString);
+            endDate = format.parse(endString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        // Ensure that end date is after start date
+        if (endDate.before(startDate)) {
+            // End date is before start date, show an error message and return
+            Helpers.showToast(this, "End date must be after start date");
+            return false;
+        }
+
 
         //if id is -1, insert new
         if (courseId == -1) {
             //new id = 0 or last + 1
-            List <Course> courses = repository.getAllCourses();
+            List<Course> courses = repository.getAllCourses();
             int length = courses.size();
             int newId;
             try {
                 newId = courses.get(length - 1).getCourseId() + 1;
-            } catch(Exception e) {
+            } catch (Exception e) {
                 newId = 1;
             }
 
@@ -150,7 +186,7 @@ public class CourseDetailsActivity extends AppCompatActivity implements AdapterV
                     editInstructorPhone.getText().toString(),
                     editNote.getText().toString(),
                     termId
-                    );
+            );
             repository.insert(course);
             //otherwise update
         } else {
@@ -169,7 +205,9 @@ public class CourseDetailsActivity extends AppCompatActivity implements AdapterV
             repository.update(course);
         }
 
-        Helpers.showToast(getApplicationContext(),"Item Saved");
+        Helpers.showToast(getApplicationContext(), "Item Saved");
+
+        return true;
     }
 
     public void deleteCourse(View v) throws InterruptedException {
@@ -177,14 +215,14 @@ public class CourseDetailsActivity extends AppCompatActivity implements AdapterV
 
         //if empty
         if (courseId == -1) {
-            Helpers.showToast(getApplicationContext(),"No Item Selected");
+            Helpers.showToast(getApplicationContext(), "No Item Selected");
             return;
         }
 
         //check if associated values in recycler view
         List<Assessment> items = repository.getAllAssessmentsByCourse(courseId);
-        if (items.size() > 0 ) {
-            Helpers.showToast(getApplicationContext(),"Associated assessments, cannot delete");
+        if (items.size() > 0) {
+            Helpers.showToast(getApplicationContext(), "Associated assessments, cannot delete");
             return;
         }
 
@@ -202,22 +240,22 @@ public class CourseDetailsActivity extends AppCompatActivity implements AdapterV
         );
         repository.delete(course);
 
-        Intent i = new Intent(this,TermDetailsActivity.class);
+        Intent i = new Intent(this, TermDetailsActivity.class);
         startActivity(i);
     }
 
     public void addAssessment(View v) throws InterruptedException {
         //if empty
         if (editName.getText().toString().isEmpty()) {
-            Helpers.showToast(getApplicationContext(),"Add a title first.");
+            Helpers.showToast(getApplicationContext(), "Add a title first.");
             return;
         }
 
         //save current
-        this.saveCourse(v);
+        if (this.saveCourse(v) == false) return;
 
-        Intent i = new Intent(CourseDetailsActivity.this,AssessmentDetailsActivity.class);
-        i.putExtra("courseId",courseId);
+        Intent i = new Intent(CourseDetailsActivity.this, AssessmentDetailsActivity.class);
+        i.putExtra("courseId", courseId);
         startActivity(i);
     }
 
@@ -248,7 +286,7 @@ public class CourseDetailsActivity extends AppCompatActivity implements AdapterV
             }
         }
 
-        Intent intent = new Intent(this,TermDetailsActivity.class);
+        Intent intent = new Intent(this, TermDetailsActivity.class);
         intent.putExtra("id", current.getTermId());
         intent.putExtra("title", current.getTermTitle());
         intent.putExtra("startDate", current.getStartDate());
@@ -267,7 +305,7 @@ public class CourseDetailsActivity extends AppCompatActivity implements AdapterV
         // Add your code here
     }
 
-    public void shareNote(View v){
+    public void shareNote(View v) {
         String note = editName.getText().toString();
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
@@ -275,4 +313,40 @@ public class CourseDetailsActivity extends AppCompatActivity implements AdapterV
         startActivity(Intent.createChooser(shareIntent, "Share via"));
     }
 
+    public void setCourseStartNotification(View v) {
+        //validate dates
+        if (editStartDate.getText().toString().contains(".") || editStartDate.getText().toString().contains("-")) {
+            Helpers.showToast(getApplicationContext(), "Only use slashes in date");
+            return;
+        }
+
+        if (editEndDate.getText().toString().isEmpty()) {
+            Helpers.showToast(getApplicationContext(), "Date cannot be empty.");
+            return;
+        }
+
+        String dateString = editStartDate.getText().toString();
+
+        String msg = '"' + editName.getText().toString() + '"' + " scheduled to start on " + dateString;
+        Helpers.createNotification(this, "Course Start Reminder", msg, dateString);
+    }
+
+    public void setCourseEndNotification(View v) {
+        //validate dates
+        if (editEndDate.getText().toString().contains(".") || editEndDate.getText().toString().contains("-")) {
+            Helpers.showToast(getApplicationContext(), "Only use slashes in date");
+            return;
+        }
+
+        if (editStartDate.getText().toString().isEmpty()) {
+            Helpers.showToast(getApplicationContext(), "Date cannot be empty.");
+            return;
+        }
+
+        String dateString = editEndDate.getText().toString();
+
+
+        String msg = '"' + editName.getText().toString() + '"' + " scheduled to end on " + dateString;
+        Helpers.createNotification(this, "Course End Reminder", msg, dateString);
+    }
 }

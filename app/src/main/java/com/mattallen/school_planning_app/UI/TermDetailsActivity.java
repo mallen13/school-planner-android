@@ -16,8 +16,12 @@ import com.mattallen.school_planning_app.Entities.Term;
 import com.mattallen.school_planning_app.Helpers.Helpers;
 import com.mattallen.school_planning_app.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class TermDetailsActivity extends AppCompatActivity {
@@ -69,8 +73,39 @@ public class TermDetailsActivity extends AppCompatActivity {
         adapter.setCourses(courses);
     }
 
-    public void saveTerm(View v) throws InterruptedException {
+    public boolean saveTerm(View v) throws InterruptedException {
         Term term;
+
+        //validate dates
+        if (editStartDate.getText().toString().contains(".") || editEndDate.getText().toString().contains(".") || editStartDate.getText().toString().contains("-") || editEndDate.getText().toString().contains("-")) {
+            Helpers.showToast(getApplicationContext(),"Only use slashes in dates");
+            return false;
+        }
+
+        if (editStartDate.getText().toString().isEmpty() || editEndDate.getText().toString().isEmpty()) {
+            Helpers.showToast(getApplicationContext(),"Dates cannot be empty.");
+            return false;
+        }
+
+        //check end date after start date
+        String startString = editStartDate.getText().toString();
+        String endString = editEndDate.getText().toString();
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = format.parse(startString);
+            endDate = format.parse(endString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        // Ensure that end date is after start date
+        if (endDate.before(startDate)) {
+            // End date is before start date, show an error message and return
+            Helpers.showToast(this, "End date must be after start date");
+            return false;
+        }
 
         //if id is -1, insert new
         if (termId == -1) {
@@ -97,6 +132,8 @@ public class TermDetailsActivity extends AppCompatActivity {
         }
 
         Helpers.showToast(getApplicationContext(),"Item Saved");
+
+        return true;
     }
 
     public void deleteTerm(View v) throws InterruptedException {
@@ -129,7 +166,7 @@ public class TermDetailsActivity extends AppCompatActivity {
             return;
         }
 
-        this.saveTerm(v);
+        if (this.saveTerm(v) == false) return;
         Intent i = new Intent(TermDetailsActivity.this,CourseDetailsActivity.class);
         i.putExtra("termId",termId);
         startActivity(i);

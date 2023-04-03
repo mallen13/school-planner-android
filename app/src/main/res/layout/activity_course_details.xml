@@ -67,8 +67,15 @@
                     android:id="@+id/courseStartDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Enter a Date"
+                    android:hint="MM/DD/YYYY"
                     android:inputType="date" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:onClick="setCourseStartNotification"
+                    android:text="Set Reminder" />
 
             </LinearLayout>
 
@@ -89,8 +96,15 @@
                     android:id="@+id/courseEndDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Enter a Date"
+                    android:hint="MM/DD/YYYY"
                     android:inputType="date" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:onClick="setCourseEndNotification"
+                    android:text="Set Reminder" />
 
             </LinearLayout>
 
