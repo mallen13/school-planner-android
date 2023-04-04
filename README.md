@@ -1,10 +1,10 @@
 # School Planner App (Mobile Android App)
 
 ## About
-This mobile Android application allows users to create a school term, then assosciate courses and semesters with that term. The information can be saved, updated, and deleted. Notifications can also be set for certain start and end dates in the app. All data is stored locally on the devilce using the Room framework that is built on a SQLite database. 
+This mobile Android application allows users to create a school term, then associate courses and semesters with that term. The information can be saved, updated, and deleted. Notifications can also be set for certain start and end dates in the app. All data is stored locally on the devilce using the Room framework that is built on a SQLite database. 
 
 ## Development
-The development process involved gathering application requirements, then doing a simple wireframe and storyboard of the application flow. Android studio was used as the IDE to develop the app using Java. Java was used over Kotlin simply due to the language familiarity, although Kotlin certainly would have been a less verbose language to use. The application mostly sticks to a Model View Controller design layout. An emulator was used for development rather than an actual device. Testing the application on a live devie would have be ideal for identifying any additional bugs. After this a signed APK was generated to be used for app deployment.
+The development process involved gathering application requirements, then doing a simple wireframe and storyboard of the application flow. Android studio was used as the IDE to develop the app using Java. Java was used over Kotlin simply due to the language familiarity, although Kotlin certainly would have been a less verbose language to use. The application mostly sticks to a Model View Controller design layout. An emulator was used for development rather than an actual device. Testing the application on a live device would have be ideal for identifying any additional bugs. After this a signed APK was generated to be used for app deployment.
 
 ## Android Vesioning 
 The appplication targets Android versions 8 -12 (SDK 26 - 32). 
