@@ -29,7 +29,8 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             itemView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
-                public void onClick(View view) {
+                public void onClick(View view)
+                {
                     int position = getAdapterPosition();
                     final Course current = mCourses.get(position);
                     Intent intent = new Intent(context,CourseDetailsActivity.class);

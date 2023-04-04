@@ -21,16 +21,27 @@ public class Assessment {
         return assessmentEndDate;
     }
 
+    public String getAssessmentStartDate() {
+        return assessmentStartDate;
+    }
+
     public void setAssessmentEndDate(String assessmentEndDate) {
         this.assessmentEndDate = assessmentEndDate;
     }
 
+    public void setAssessmentStartDate(String assessmentStartDate) {
+        this.assessmentStartDate = assessmentStartDate;
+    }
+
     private String assessmentEndDate;
 
-    public Assessment(int assessmentId, String assessmentName, String assessmentCategory, String endDate, int courseId) {
+    private String assessmentStartDate;
+
+    public Assessment(int assessmentId, String assessmentName, String assessmentCategory, String startDate, String endDate, int courseId) {
         this.assessmentId = assessmentId;
         this.assessmentName = assessmentName;
         this.assessmentCategory = assessmentCategory;
+        this.startDate = startDate;
         this.endDate = endDate;
         this.courseId = courseId;
     }

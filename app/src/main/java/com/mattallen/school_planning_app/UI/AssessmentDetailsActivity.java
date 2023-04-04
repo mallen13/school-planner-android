@@ -27,11 +27,13 @@ import java.util.Locale;
 public class AssessmentDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     EditText editName;
     EditText editEndDate;
+    EditText editStartDate;
     String editCategory;
     int assessmentId;
     int courseId;
     String category;
     String endDate;
+    String startDate;
     String name;
 
     Repository repository;
@@ -44,17 +46,20 @@ public class AssessmentDetailsActivity extends AppCompatActivity implements Adap
         //get inputs
         editName = findViewById(R.id.assessmentTitleInput);
         editEndDate = findViewById(R.id.assessmentEndDate);
+        editStartDate = findViewById(R.id.assessmentStartDate);
 
         //get intents
         assessmentId = getIntent().getIntExtra("id", -1 );
         name = getIntent().getStringExtra("title");
         category = getIntent().getStringExtra("category");
+        startDate = getIntent().getStringExtra("startDate");
         endDate = getIntent().getStringExtra("endDate");
         courseId = getIntent().getIntExtra("courseId", -1);
 
         //set inputs to intent vals
         editName.setText(name);
         editEndDate.setText(endDate);
+        editStartDate.setText(startDate);
 
         repository = new Repository(getApplication());
 
@@ -80,9 +85,15 @@ public class AssessmentDetailsActivity extends AppCompatActivity implements Adap
     public void saveAssessment(View v) throws InterruptedException {
         Assessment assessment;
 
+
         //validate dates
-        if (editEndDate.getText().toString().contains(".") || editEndDate.getText().toString().contains("-")) {
-            Helpers.showToast(getApplicationContext(),"Only use slashes in dates");
+        if (editStartDate.getText().toString().contains(".") || editEndDate.getText().toString().contains(".") || editStartDate.getText().toString().contains("-") || editEndDate.getText().toString().contains("-")) {
+            Helpers.showToast(getApplicationContext(), "Only use slashes in dates");
+            return;
+        }
+
+        if (editStartDate.getText().toString().isEmpty() || editEndDate.getText().toString().isEmpty()) {
+            Helpers.showToast(getApplicationContext(), "Dates cannot be empty.");
             return;
         }
 
@@ -103,6 +114,7 @@ public class AssessmentDetailsActivity extends AppCompatActivity implements Adap
                     newId,
                     editName.getText().toString(),
                     editCategory,
+                    editStartDate.getText().toString(),
                     editEndDate.getText().toString(),
                     courseId
             );
@@ -113,6 +125,7 @@ public class AssessmentDetailsActivity extends AppCompatActivity implements Adap
                     assessmentId,
                     editName.getText().toString(),
                     editCategory,
+                    editStartDate.getText().toString(),
                     editEndDate.getText().toString(),
                     courseId
             );
@@ -135,6 +148,7 @@ public class AssessmentDetailsActivity extends AppCompatActivity implements Adap
                 assessmentId,
                 editName.getText().toString(),
                 editCategory,
+                editStartDate.getText().toString(),
                 editEndDate.getText().toString(),
                 courseId
         );
@@ -197,6 +211,24 @@ public class AssessmentDetailsActivity extends AppCompatActivity implements Adap
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         // Add your code here
+    }
+
+    public void setAssessmentStartNotification(View v) {
+        //validate dates
+        if (editStartDate.getText().toString().contains(".") || editStartDate.getText().toString().contains("-")) {
+            Helpers.showToast(getApplicationContext(),"Only use slashes in dates");
+            return;
+        }
+
+        if (editStartDate.getText().toString().isEmpty()) {
+            Helpers.showToast(getApplicationContext(), "Date cannot be empty.");
+            return;
+        }
+
+        String dateString = editStartDate.getText().toString();
+
+        String msg = editCategory.toString() + ": " + '"' + editName.getText().toString() + '"' + " due on " + dateString;
+        Helpers.createNotification(this, "Assessment Reminder", msg, dateString);
     }
 
     public void setAssessmentNotification(View v) {

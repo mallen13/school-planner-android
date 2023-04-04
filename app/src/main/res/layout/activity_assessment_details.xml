@@ -59,6 +59,35 @@
 
             </LinearLayout>
 
+            <!--start Date-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:text="Start Date:"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/assessmentStartDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="MM/DD/YYYY"
+                    android:inputType="date" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:onClick="setAssessmentStartNotification"
+                    android:text="Set Reminder" />
+
+            </LinearLayout>
+
             <!--End Date-->
             <LinearLayout
                 android:layout_width="match_parent"
